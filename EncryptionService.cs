@@ -92,8 +92,10 @@ public sealed class EncryptionService : IEncryptionService
 
         public override bool Return(Aes obj)
         {
-            if (obj is null) return false;
-            obj.Clear();
+            if (obj?.Key == null)
+                return false;
+
+            Array.Clear(obj.Key, 0, obj.Key.Length);
             return true;
         }
     }
@@ -106,7 +108,14 @@ public sealed class EncryptionService : IEncryptionService
 
         public override HMACSHA256 Create() => new HMACSHA256(_key);
 
-        public override bool Return(HMACSHA256 obj) => obj?.Key != null;
+        public override bool Return(HMACSHA256 obj)
+        {
+            if (obj?.Key == null)
+                return false;
+
+            Array.Clear(obj.Key, 0, obj.Key.Length);
+            return true;
+        }
     }
     #endregion
 
